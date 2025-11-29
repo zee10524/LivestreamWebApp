@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar } from "./_components/navbar";
-import {Sidebar } from './_components/sidebar';
+import { Sidebar } from './_components/sidebar';
 import { Container } from './_components/container';
 
 interface BrowseLayoutProps {
@@ -11,12 +11,12 @@ const BrowseLayout = ({ children }: BrowseLayoutProps): React.ReactElement => {
     return (
         <>
             <Navbar />
-            <div className="flex h-full pt-20">                
-                {children} 
+            <div className="flex h-full pt-20">
+                <Sidebar />
+                
                 <Container>
-                    <Sidebar></Sidebar>  
+                    {children}
                 </Container>
-                          
             </div>
         </>
     );
