@@ -109,7 +109,7 @@ export const unfollowUser = async (id: string) => {
     where: {
       followerId: self.id,
       followingId: otherUser.id,
-    },
+    }, 
   });
 
   if (!existingFollow) throw new Error("You are not following this user");

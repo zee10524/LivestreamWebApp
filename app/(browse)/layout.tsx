@@ -4,6 +4,7 @@ import { Navbar } from "./_components/navbar";
 import { Sidebar,SidebarSkeleton } from './_components/sidebar';
 import { Container } from './_components/container';
 
+
 interface BrowseLayoutProps {
     children: React.ReactNode;
 }

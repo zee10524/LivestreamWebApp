@@ -2,11 +2,12 @@ import { Toggle } from "./toggle";
 import { Wrapper } from "./wrapper";
 import { Recommended , RecommendedSkeleton} from "./recommended";
 
+
 import { getRecommended } from "@/lib/recommended-service";
 
 export const Sidebar = async () => {
     const recommended = await getRecommended();
-
+    
     return (
         <Wrapper>
             <Toggle />

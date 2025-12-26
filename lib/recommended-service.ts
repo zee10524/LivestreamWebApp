@@ -1,72 +1,41 @@
+// lib/recommended-service.ts
+
 import { db } from "@/lib/db";
 import { getSelf } from "@/lib/auth-service";
 
 export const getRecommended = async () => {
-  let userId;
+    let userId;
+    let userName;
 
-  try {
-    const self = await getSelf();
-    userId = self.id;
-  } catch (error) {
-    userId = null;
-  }
+    try {
+        const self = await getSelf();
+        userId = self.id;
+        userName=self.username;
+    } catch {
+        userId = null;
+    }
 
-  let users = [];
+    let users = [];
 
-  if (userId) {
-    users = await db.user.findMany({
-      where: {
-        AND: [
-          {
-            NOT: {
-              id: userId,
-            },
-          },
-          {
-            NOT: {
-              followedBy: {
-                some: {
-                  followerId: userId,
+    if (userId) {
+        users = await db.user.findMany({
+            where: {
+                NOT: {
+                    // id: userId,
+                    username: userName
                 },
-              },
             },
-          },
-          {
-            NOT: {
-              blocking: {
-                some: {
-                  blockedId: userId,
-                },
-              },
+            orderBy: {
+                createdAt: "desc",
             },
-          },
-        ],
-      },
-      include: {
-        stream: {
-          select: {
-            isLive: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  } else {
-    users = await db.user.findMany({
-      include: {
-        stream: {
-          select: {
-            isLive: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  }
+        });
+    } else {
+        users = await db.user.findMany({
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+    }
 
-  return users;
+    return users;
 };
