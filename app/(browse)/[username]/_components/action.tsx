@@ -1,17 +1,20 @@
 "use client";
-import { toast, Toaster } from 'sonner';
-import { useTransition } from "react";
 
-import { onFollow , onUnfollow } from "@/actions/follow";
+import React, { useTransition } from "react";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 
-interface ActionsProps{
-    isFollowing : boolean;
-    userId: string;
-}
+import { onFollow, onUnfollow } from "@/actions/follow";
+import { onBlock, onUnblock } from "@/actions/block";
 
-export const Actions = ({ isFollowing, userId}:ActionsProps) => {
-
+export function Actions({
+  isFollowing,
+  userId,
+}: {
+  isFollowing: boolean;
+  userId: string;
+}) {
   const [isPending, startTransition] = useTransition();
 
   const handleFollow = () => {
@@ -34,7 +37,28 @@ export const Actions = ({ isFollowing, userId}:ActionsProps) => {
     });
   };
 
-  
+  const handleBlock = () => {
+    startTransition(() => {
+      onBlock(userId)
+        .then((data) =>
+          !!data
+            ? toast.success(`You have blocked ${data?.blocked.username}`)
+            : toast.success("Blocked guest")
+        )
+        .catch(() => toast.error("Something went wrong, failed to block"));
+    });
+  };
+
+  const handleUnblock = () => {
+    startTransition(() => {
+      onUnblock(userId)
+        .then((data) =>
+          toast.success(`You have unblocked ${data.blocked.username}`)
+        )
+        .catch(() => toast.error("Something went wrong, failed to unblock"));
+    });
+  };
+
   const onClick = () => {
     if (isFollowing) {
       handleUnfollow();
@@ -44,8 +68,16 @@ export const Actions = ({ isFollowing, userId}:ActionsProps) => {
   };
 
   return (
-    <Button variant="primary" disabled={isPending} onClick={onClick}>
+    <>
+      <Button variant="primary" disabled={isPending} onClick={onClick}>
         {isFollowing ? "Unfollow" : "Follow"}
       </Button>
+      <Button onClick={handleBlock} disabled={isPending}>
+        Block
+      </Button>
+      <Button onClick={handleUnblock} disabled={isPending}>
+        UnBlock
+      </Button>
+    </>
   );
-};
+}
