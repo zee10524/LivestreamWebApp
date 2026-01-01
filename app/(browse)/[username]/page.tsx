@@ -37,6 +37,7 @@ const UserPage = async ({
       <p>user ID: {user.id}</p>
       <p>is following: {isFollowing.toString()}</p>
       <p> is Blocked by this user : {`${isBlocked}`}</p>
+      <p>is streaming: {user.stream?.isLive.toString()}</p>
       <Actions  userId = {user.id} isFollowing = {isFollowing}/>
     </div>
   );

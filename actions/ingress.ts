@@ -86,6 +86,7 @@ export const createIngress = async (type: "RTMP_INPUT" | "WHIP_INPUT") => {
       ingressId: ingress.ingressId,
       serverUrl: ingress.url,
       streamKey: ingress.streamKey,
+      isLive:true,
     },
   });
 
