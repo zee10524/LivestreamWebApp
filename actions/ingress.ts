@@ -25,14 +25,20 @@ const ingressClient = new IngressClient(
   process.env.LIVEKIT_API_SECRET!,
 );
 
-export const resetIngresses = async (userId: string) => {
-  const ingresses = await ingressClient.listIngress({ roomName: userId });
-  const rooms = await roomService.listRooms([userId]);
+/* ===============================
+   DELETE ALL INGRESSES (TESTING)
+================================ */
+export const resetIngresses = async () => {
+  // 1️⃣ List ALL ingresses
+  const ingresses = await ingressClient.listIngress();
 
+  // 2️⃣ Delete ALL rooms (optional, ok for testing)
+  const rooms = await roomService.listRooms();
   for (const room of rooms) {
     await roomService.deleteRoom(room.name);
   }
 
+  // 3️⃣ Delete ALL ingresses
   for (const ingress of ingresses) {
     if (ingress.ingressId) {
       await ingressClient.deleteIngress(ingress.ingressId);
@@ -40,9 +46,13 @@ export const resetIngresses = async (userId: string) => {
   }
 };
 
-export const createIngress = async (type: "RTMP_INPUT" | "WHIP_INPUT") => {
+/* ===============================
+   CREATE INGRESS
+================================ */
+export const createIngress = async (
+  type: "RTMP_INPUT" | "WHIP_INPUT"
+) => {
   const self = await getSelf();
-
   if (!self) {
     throw new Error("You must be logged in to continue");
   }
@@ -52,7 +62,8 @@ export const createIngress = async (type: "RTMP_INPUT" | "WHIP_INPUT") => {
       ? IngressInput.WHIP_INPUT
       : IngressInput.RTMP_INPUT;
 
-  await resetIngresses(self.id);
+  // 🔥 Delete all ingresses before creating new one
+  await resetIngresses();
 
   const options: CreateIngressOptions = {
     name: self.username,
@@ -66,15 +77,20 @@ export const createIngress = async (type: "RTMP_INPUT" | "WHIP_INPUT") => {
   } else {
     options.video = {
       source: TrackSource.CAMERA,
-      encodingPreset: IngressVideoEncodingPreset.H264_1080P_30FPS_3_LAYERS,
+      encodingPreset:
+        IngressVideoEncodingPreset.H264_1080P_30FPS_3_LAYERS,
     };
     options.audio = {
       source: TrackSource.MICROPHONE,
-      encodingPreset: IngressAudioEncodingPreset.OPUS_STEREO_96KBPS,
+      encodingPreset:
+        IngressAudioEncodingPreset.OPUS_STEREO_96KBPS,
     };
   }
 
-  const ingress = await ingressClient.createIngress(ingressType, options);
+  const ingress = await ingressClient.createIngress(
+    ingressType,
+    options
+  );
 
   if (!ingress.ingressId || !ingress.url || !ingress.streamKey) {
     throw new Error("Failed to create ingress");
@@ -86,11 +102,11 @@ export const createIngress = async (type: "RTMP_INPUT" | "WHIP_INPUT") => {
       ingressId: ingress.ingressId,
       serverUrl: ingress.url,
       streamKey: ingress.streamKey,
-      isLive:true,
+      isLive: true,
     },
   });
 
   revalidatePath(`/u/${self.username}/keys`);
 
-  return { success: true }; // Important ✔ only send a plain object
+  return { success: true };
 };
