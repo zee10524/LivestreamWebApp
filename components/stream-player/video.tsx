@@ -43,3 +43,14 @@ export const Video = ({
     </div>
   );
 };
+
+export const VideoSkeleton = () => {
+  return (
+    <div className="aspect-video border-b group relative bg-background">
+      <div className="flex flex-col space-y-4 items-center justify-center h-full">
+        <div className="h-12 w-12 text-muted-foreground animate-pulse bg-white/5 rounded-full" />
+        <div className="h-4 w-32 bg-white/5 animate-pulse rounded-md" />
+      </div>
+    </div>
+  );
+};
