@@ -11,6 +11,7 @@ import { Chat, ChatSkeleton } from "./chat";
 import { ChatToggle } from "./chat-toggle";
 import { Header } from "./header";
 import { InfoCard } from "./info-card";
+import { AboutCard } from "./about-card";
 
 interface StreamPlayerProps {
   user: {
@@ -61,16 +62,17 @@ export const StreamPlayer = ({
         )}
       >
         {/* =======================
-            CENTER / MAIN COLUMN
+            MAIN CONTENT COLUMN
            ======================= */}
         <div className="space-y-6 col-span-1 lg:col-span-2 2xl:col-span-5 pb-10 lg:overflow-y-auto hidden-scrollbar">
-          {/* 🎥 Video */}
+          
+          {/* Video */}
           <Video
             hostName={user.username}
             hostIdentity={user.id}
           />
 
-          {/* 🧾 Header */}
+          {/* Header */}
           <Header
             hostName={user.username}
             hostIdentity={user.id}
@@ -80,17 +82,26 @@ export const StreamPlayer = ({
             name={stream.name}
           />
 
-          {/* ✏️ Edit Stream Info (CORRECT POSITION) */}
+          {/* Stream Info */}
           <InfoCard
             hostIdentity={user.id}
             viewerIdentity={identity}
             name={stream.name}
             thumbnailUrl={stream.thumbnailUrl}
           />
+
+          {/* About Card */}
+          <AboutCard
+            hostName={user.username}
+            hostIdentity={user.id}
+            viewerIdentity={identity}
+            bio={user.bio}
+            followedByCount={user._count.followers}
+          />
         </div>
 
         {/* =======================
-              CHAT COLUMN
+                CHAT COLUMN
            ======================= */}
         <div
           className={cn(
@@ -112,6 +123,10 @@ export const StreamPlayer = ({
     </>
   );
 };
+
+/* =======================
+        SKELETON
+   ======================= */
 
 export const StreamPlayerSkeleton = () => {
   return (
