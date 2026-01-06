@@ -40,16 +40,19 @@ export const CommunityItem = ({
   };
 
   return (
-    <div className={cn(
-      "group flex items-center justify-between w-full p-2 rounded-md text-sm hover:bg-white/5",
-      isPending && "opacity-50 pointer-events-none"
-    )}>
-      <p style={{ color: color }}>
+    <div
+      className={cn(
+        "group flex items-center justify-between w-full p-2 rounded-md text-sm hover:bg-white/5",
+        isPending && "opacity-50 pointer-events-none"
+      )}
+    >
+      <p style={{ color }}>
         {participantName}
       </p>
-      {/* Only show block button if current viewer is the host and the row is not themselves */}
+
+      {/* Only show block button if viewer is host and not blocking themselves */}
       {isHost && !isSelf && (
-        <Hint label="Block">
+        <Hint label="Block" asChild>
           <Button
             variant="ghost"
             disabled={isPending}

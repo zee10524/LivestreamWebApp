@@ -1,48 +1,48 @@
-// import Link from "next/link";
-// import { LogOut } from "lucide-react";
-// import { UserButton } from "@clerk/nextjs";
-
-// import { Button } from "@/components/ui/button";
-
-// export const Actions = () => {
-//   return (
-//     <div className="flex items-center justify-end gap-x-2">
-//       <Button
-//         size="sm"
-//         variant="ghost"
-//         className="text-muted-foreground hover:text-primary"
-//         asChild
-//       >
-//         <Link href="/">
-//           <LogOut className="h-5 w-5 mr-2" />
-//           Exit
-//         </Link>
-//       </Button>
-//       <UserButton 
-//         afterSignOutUrl="/"
-//       />
-//     </div>
-//   );
-// };
-
-
-"use client";
-
+import Link from "next/link";
+import { LogOut } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
 
-export function Actions() {
-  const [mounted, setMounted] = useState(false);
+import { Button } from "@/components/ui/button";
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
+export const Actions = () => {
   return (
-    <div className="flex items-center gap-x-4">
-      <UserButton afterSignOutUrl="/" />
+    <div className="flex items-center justify-end gap-x-2">
+      <Button
+        size="sm"
+        variant="ghost"
+        className="text-muted-foreground hover:text-primary"
+        asChild
+      >
+        <Link href="/">
+          <LogOut className="h-5 w-5 mr-2" />
+          Exit
+        </Link>
+      </Button>
+      <UserButton 
+        afterSignOutUrl="/"
+      />
     </div>
   );
-}
+};
+
+
+// "use client";
+
+// import { UserButton } from "@clerk/nextjs";
+// import { useEffect, useState } from "react";
+
+// export function Actions() {
+//   const [mounted, setMounted] = useState(false);
+
+//   useEffect(() => {
+//     setMounted(true);
+//   }, []);
+
+//   if (!mounted) return null;
+
+//   return (
+//     <div className="flex items-center gap-x-4">
+//       <UserButton afterSignOutUrl="/" />
+//     </div>
+//   );
+// }

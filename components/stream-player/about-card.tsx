@@ -1,6 +1,7 @@
 "use client";
 
 import { VerifiedMark } from "@/components/verified-mark";
+import { BioModal } from "./bio-modal";
 
 interface AboutCardProps {
   hostName: string;
@@ -33,9 +34,9 @@ export const AboutCard = ({
           </div>
 
           {isHost && (
-            <button className="text-sm font-medium text-muted-foreground hover:text-primary transition">
-              EDIT
-            </button>
+            // <button className="text-sm font-medium text-muted-foreground hover:text-primary transition">
+              <BioModal initialValue={bio}></BioModal>
+            // </button>
           )}
         </div>
 
