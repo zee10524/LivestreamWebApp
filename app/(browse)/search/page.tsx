@@ -1,17 +1,21 @@
 import React, { Suspense } from "react";
-import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { Results, ResultsSkeleton } from "./_components/results";
 
-export const metadata: Metadata = {
-  title: "Home",
-};
+export default function SearchPage({
+  searchParams,
+}: {
+  searchParams: {
+    term?: string;
+  };
+}) {
+  if (!searchParams.term) redirect("/");
 
-export default function Home() {
   return (
     <div className="h-full p-8 max-w-screen-2xl mx-auto">
       <Suspense fallback={<ResultsSkeleton />}>
-        <Results />
+        <Results term={searchParams.term} />
       </Suspense>
     </div>
   );
