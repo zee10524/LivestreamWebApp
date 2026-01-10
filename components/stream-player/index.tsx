@@ -28,7 +28,7 @@ interface StreamPlayerProps {
     isChatFollowersOnly: boolean;
     name: string;
     thumbnailUrl: string | null;
-  };
+  } | null;
   isFollowing: boolean;
 }
 
@@ -37,6 +37,22 @@ export const StreamPlayer = ({
   stream,
   isFollowing,
 }: StreamPlayerProps) => {
+  /* ✅ OFFLINE GUARD */
+  if (!stream) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-center space-y-2">
+          <h2 className="text-xl font-semibold">
+            {user.username} is offline
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            This user is not streaming right now.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   const { token, name, identity } = useViewerToken(user.id);
   const { collapsed } = useChatSidebar((state) => state);
 
@@ -46,7 +62,6 @@ export const StreamPlayer = ({
 
   return (
     <>
-      {/* Floating chat toggle */}
       {collapsed && (
         <div className="hidden lg:block fixed top-[100px] right-2 z-50">
           <ChatToggle />
@@ -61,18 +76,9 @@ export const StreamPlayer = ({
           collapsed && "lg:grid-cols-2 2xl:grid-cols-2"
         )}
       >
-        {/* =======================
-            MAIN CONTENT COLUMN
-           ======================= */}
         <div className="space-y-6 col-span-1 lg:col-span-2 2xl:col-span-5 pb-10 lg:overflow-y-auto hidden-scrollbar">
-          
-          {/* Video */}
-          <Video
-            hostName={user.username}
-            hostIdentity={user.id}
-          />
+          <Video hostName={user.username} hostIdentity={user.id} />
 
-          {/* Header */}
           <Header
             hostName={user.username}
             hostIdentity={user.id}
@@ -82,7 +88,6 @@ export const StreamPlayer = ({
             name={stream.name}
           />
 
-          {/* Stream Info */}
           <InfoCard
             hostIdentity={user.id}
             viewerIdentity={identity}
@@ -90,7 +95,6 @@ export const StreamPlayer = ({
             thumbnailUrl={stream.thumbnailUrl}
           />
 
-          {/* About Card */}
           <AboutCard
             hostName={user.username}
             hostIdentity={user.id}
@@ -100,9 +104,6 @@ export const StreamPlayer = ({
           />
         </div>
 
-        {/* =======================
-                CHAT COLUMN
-           ======================= */}
         <div
           className={cn(
             "col-span-1 border-l border-white/10",
@@ -123,11 +124,6 @@ export const StreamPlayer = ({
     </>
   );
 };
-
-/* =======================
-        SKELETON
-   ======================= */
-
 export const StreamPlayerSkeleton = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 2xl:grid-cols-6 h-full">
