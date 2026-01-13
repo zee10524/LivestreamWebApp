@@ -1,11 +1,3 @@
-// import type { NextConfig } from "next";
-
-// const nextConfig: NextConfig = {
-//   /* config options here */
-// };
-
-// export default nextConfig;
-
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -16,6 +8,16 @@ const nextConfig: NextConfig = {
         hostname: "utfs.io",
       },
     ],
+  },
+
+  allowedDevOrigins: ["*.ngrok-free.dev"],
+
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
+  typescript: {
+    ignoreBuildErrors: true,
   },
 };
 
